@@ -30,6 +30,7 @@ import * as utils from './utils';
 import * as winutils from './win/utils';
 
 vi.mock('./authentication');
+vi.mock('./vm-webview', () => ({ createVmWebview: vi.fn() }));
 vi.mock('./utils');
 vi.mock('node:fs/promises');
 vi.mock('node:fs');

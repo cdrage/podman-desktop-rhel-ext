@@ -1,0 +1,118 @@
+@import 'tailwindcss';
+@source '../../../node_modules/@podman-desktop/ui-svelte/dist';
+
+/* Match bootc's type scale. Keep rem-based spacing at the browser default. */
+@theme {
+  --spacing-leftsidebar: 170px;
+  --text-xs: 10px;
+  --text-sm: 11px;
+  --text-base: 12px;
+  --text-md: 12px;
+  --text-lg: 14px;
+  --text-xl: 16px;
+  --text-2xl: 18px;
+  --text-3xl: 20px;
+  --text-4xl: 24px;
+  --text-5xl: 30px;
+  --text-6xl: 36px;
+  --color-gray-700: #aaabac;
+}
+
+:root {
+  font-family: var(--pd-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  color: var(--pd-content-text);
+  background: var(--pd-content-bg);
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+html,
+body,
+#app,
+main {
+  height: 100%;
+}
+
+main {
+  display: flex;
+  overflow: hidden;
+}
+
+.workspace {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.vm-name {
+  color: var(--pd-link);
+}
+
+.vm-name:hover {
+  text-decoration: underline;
+}
+
+.muted {
+  color: var(--pd-content-secondary-text);
+  font-size: var(--text-sm);
+}
+
+.error-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 20px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.empty {
+  margin: auto;
+  padding: 48px;
+  text-align: center;
+}
+
+.list-content {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  min-width: 0;
+}
+
+@layer base {
+  button:enabled,
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+}
+
+.console-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  min-height: 36px;
+  gap: 12px;
+  padding: 8px 20px;
+  font-size: var(--text-sm);
+  color: var(--pd-content-secondary-text);
+}

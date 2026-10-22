@@ -2,6 +2,76 @@
 
 The RHEL VMs extension helps the user run RHEL Virtual machines.
 
+## VM manager
+
+The **RHEL VMs** dashboard shows VM counts and actions for Macadam VMs owned by this extension.
+The **Virtual Machines** page provides a searchable table.
+The existing Resources view remains available.
+
+- The table shows status, provider, CPUs, memory, and disk size.
+- Each VM name opens its summary page.
+- Start, stop, and delete actions use the existing RHEL lifecycle.
+- The Terminal tab provides an SSH shell with resize and reconnect controls.
+- The Logs tab shows output from actions in this page during the current extension session.
+
+### Create and manage a VM
+
+1. Open **RHEL VMs** in the sidebar.
+2. Select **Create VM**.
+3. Complete the existing RHEL creation form.
+4. Open **Virtual Machines** from the extension dashboard.
+5. Select the VM name to open its details.
+6. If the VM is stopped, select **Start** before terminal access.
+
+The creation form retains image downloads, cached images, local images, and Red Hat registration.
+Older Podman Desktop versions open Resources instead of the creation form.
+
+### Safety and limits
+
+Stop the VM before deletion. Macadam deletion removes the VM and its managed disk.
+
+The terminal uses the existing Macadam SSH identity.
+The webview never receives private key contents.
+The guest must expose SSH for terminal access.
+Terminal errors appear with a reconnect control.
+
+The manager does not install or upgrade Macadam during list refresh.
+Explicit VM actions retain the existing installer behavior.
+The manager uses the extension's Macadam namespace, not unrelated Macadam VMs.
+VMs remain under Macadam control after the webview closes.
+Operation logs are not guest system logs and do not persist across extension restarts.
+
+### Development layout
+
+The extension backend remains in `src/`.
+The Svelte webview is in `packages/frontend/`.
+The RPC contract is in `packages/shared/`.
+The frontend builds to `media/`, which the Containerfile includes in the extension image.
+The dashboard and VM details follow the bootc layout.
+SSH and logs share a local adapter of Podman Desktop's `TerminalWindow` component.
+The `@podman-desktop/ui-svelte` package does not export this component.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm build
+pnpm typecheck:backend
+pnpm typecheck:frontend
+pnpm test
+pnpm lint:check
+```
+
+`pnpm test` runs the backend and frontend tests.
+`pnpm typecheck` checks both workspaces.
+
+The existing Podman Desktop `--extension-folder` workflow uses the repository root.
+`pnpm watch` rebuilds both the backend and frontend.
+
+Build the extension image from the repository root:
+
+```sh
+podman build -f build/Containerfile -t rhel-vms:dev .
+```
+
 ## Pre-requisites
 
 ### On Windows/WSL/x86_64

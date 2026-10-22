@@ -27,6 +27,7 @@ const excludeArray = [
   
 const config = {
   test: {
+    include: ['src/**/*.spec.ts'],
     exclude: excludeArray,
     coverage: {
       provider: 'v8',

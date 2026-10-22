@@ -39,7 +39,7 @@ const compat = new FlatCompat({
 });
 
 const TYPESCRIPT_PROJECTS = [
-  './tsconfig.json', 'tests/*/tsconfig.json',
+  './tsconfig.json', 'tests/*/tsconfig.json', 'packages/frontend/tsconfig.json',
 ];
 
 export default [
@@ -48,6 +48,8 @@ export default [
       '*.config.*js',
       '**/*.config.*js',
       '**/dist/**/*',
+      'media/**',
+      '**/*.config.ts',
       '**/test-resources',
       '**/__mocks__/',
       '**/coverage/',

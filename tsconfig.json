@@ -6,19 +6,19 @@
     "resolveJsonModule": true,
     "lib": [
       "ES2024",
-      "webworker",
+      "webworker"
     ],
     "sourceMap": true,
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist",
     "skipLibCheck": true,
     "types": [
-      "node",
+      "node"
     ],
-    "strict": true,
+    "strict": true
   },
   "include": [
-    "src",
+    "src"
   ]
 }
   

@@ -1,0 +1,31 @@
+{
+  "name": "@rhel-vms/frontend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "typecheck": "svelte-check --tsconfig tsconfig.json",
+    "test": "vitest run --config vitest.config.ts"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.3.1",
+    "@podman-desktop/ui-svelte": "1.21.0",
+    "svelte": "^5.57.2",
+    "svelte-fa": "^4.0.4",
+    "@fortawesome/free-solid-svg-icons": "^7.3.1",
+    "@xterm/xterm": "^6.0.0",
+    "@xterm/addon-fit": "^0.11.0"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "tailwindcss": "^4.3.3",
+    "svelte-check": "^4.7.7",
+    "@testing-library/svelte": "^5.4.2",
+    "jsdom": "^26.1.0",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
+  }
+}

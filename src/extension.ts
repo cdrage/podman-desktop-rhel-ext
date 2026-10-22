@@ -33,6 +33,9 @@ import { LoggerDelegator } from './logger';
 import { MacadamInitializer } from './macadam-init';
 import { ProviderConnectionShellAccessImpl } from './macadam-machine-stream';
 import { getErrorMessage, pullImageFromRedHatRegistry, verifyContainerProivder } from './utils';
+import type { MachineSource } from './vm-service';
+import { VmService } from './vm-service';
+import { createVmWebview } from './vm-webview';
 import { isHyperVEnabled, isWSLEnabled } from './win/utils';
 
 const MACADAM_CLI_NAME = 'macadam';
@@ -124,6 +127,53 @@ export async function activate(extensionContext: extensionApi.ExtensionContext):
   });
 
   extensionContext.subscriptions.push(macadamCli);
+
+  const vmService = new VmService({
+    list: async (): ReturnType<MachineSource['list']> => {
+      if (!macadam.areBinariesAvailable()) {
+        return { machines: [], available: false };
+      }
+      const result = await getJSONMachineList();
+      return {
+        available: true,
+        error: result.error || undefined,
+        machines: result.list.map(machine => ({
+          name: machine.Name,
+          image: machine.Image,
+          cpus: machine.CPUs,
+          memory: Number(machine.Memory),
+          diskSize: Number(machine.DiskSize),
+          port: machine.Port,
+          remoteUsername: machine.RemoteUsername,
+          identityPath: machine.IdentityPath,
+          vmType: machine.VMType,
+          running: machine.Running,
+          starting: machine.Starting,
+        })),
+      };
+    },
+    action: async (machine, action, logger): Promise<void> => {
+      if (action === 'start') {
+        await startMachine(provider, machine, undefined, logger);
+      } else if (action === 'stop') {
+        await stopMachine(provider, machine, undefined, logger);
+      } else {
+        await macadamInitializer.ensureBinariesUpToDate();
+        await macadam.removeVm({
+          name: machine.name,
+          containerProvider: verifyContainerProivder(machine.vmType),
+          runOptions: { logger },
+        });
+      }
+      await updateMachines(provider, extensionContext);
+    },
+    create: (): Promise<void> => {
+      // Older Desktop versions expose creation through the Resources page.
+      const navigate = extensionApi.navigation.navigateToCreateProviderConnection;
+      return navigate ? navigate(provider.id) : extensionApi.navigation.navigateToResources();
+    },
+  });
+  await createVmWebview(extensionContext, vmService);
 }
 
 async function timeout(time: number): Promise<void> {
